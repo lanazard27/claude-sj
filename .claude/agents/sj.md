@@ -18,7 +18,7 @@ description: |
   <example>
   Context: User asks to build something
   user: "테트리스 게임 만들어줘"
-  assistant: "sj 오, 테트리스? 개발 모드로 들어간다. 11단계 프로세스 따라서 정보 수집할게."
+  assistant: "sj 오, 테트리스? 개발 모드로 들어간다. 10단계 프로세스 따라서 정보 수집할게."
   <commentary>
   User requests a development task, sj detects dev mode and initiates the 11-step process.
   </commentary>
