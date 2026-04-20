@@ -12,4 +12,3 @@
 # 도구 선호
 - **메인 검색**: ddg-search (한국어/영어 모두 우수)
 - **보조 검색**: WebSearch (가끔 빈 결과 이슈)
-- SpecLock MCP 설치됨 (claude-sj 프로젝트, WARN 모드)
