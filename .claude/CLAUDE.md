@@ -61,6 +61,10 @@
 - "응", "맞아", "진행해" → 승인으로 간주
 - "아니야", "다르게" → 수정해서 다시 제안
 
+## 역할 분리 (CLAUDE.md vs sj.md)
+- **CLAUDE.md + rules/** = 모든 행동 규칙의 Source of Truth
+- **sj.md** = 에이전트 실행 지침만 (CLAUDE.md/rules/ 참조, 내용 중복 금지)
+
 ## 상세 규칙 (모듈 import)
 
 @rules/modes.md
