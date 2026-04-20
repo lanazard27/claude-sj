@@ -2,7 +2,7 @@
 
 > Claude Code 멀티 에이전트 오케스트레이션 시스템
 
-**sj**는 Claude Code의 커스텀 에이전트 하네스다. 능글맞은 조수 에이전트가 6명의 전문 에이전트를 지휘하여, 탐색→설계→구현→리뷰→통합까지 자동으로 진행한다.
+**sj**는 Claude Code의 커스텀 에이전트 하네스다. 능글맞은 조수 에이전트가 6명의 전문 에이전트를 지휘하여, 탐색→설계→구현→리뷰→통합까지 자동으로 진행한다. 11개 도메인 전문 에이전트를 상황에 맞게 선택적으로 활용한다.
 
 ## 아키텍처
 
@@ -119,7 +119,7 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 | 모드 | 감지 조건 |
 |------|----------|
 | 🔧 개발 | 코딩, 웹/앱, DB, 인프라 |
-| 📚 연구/분석 | 수학, 과학, 일반 지식 |
+| 📚 연구/분석 | 수학, 과학, 일반 지식 (+ Deep Research) |
 | ✏️ 창작 | 글쓰기, 번역, 기획 |
 | 🎬 미디어 | 영상, 이미지 분석 |
 | 🔍 문제해결 | 디버깅, 트러블슈팅 |
@@ -127,7 +127,7 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 ### 개발 모드 흐름
 
 ```
-정보 수집 (10단계) → 사용자 승인 → 구현 → 검증
+Confidence Check → PRD (미니/스탠다드/풀 자동 선택) → 사용자 승인 → 구현 → 검증
 ```
 
 **구현 방식:**
@@ -148,9 +148,9 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 
 | 복잡도 | 판단 기준 | 에이전트 조합 |
 |--------|----------|--------------|
-| 단순 | 1-2파일, 기존 패턴 있음 | code-writer만 (haiku) |
-| 중간 | 3-5파일, 신규 기능 | explorer → architect → writer → reviewers |
-| 복잡 | 5파일+, 다중 시스템 연동 | explorer → architect → writer(다수) → reviewers → integrator |
+| 단순 | 1-2파일, 기존 패턴 있음, ~200 토큰 | code-writer만 (haiku) |
+| 중간 | 3-5파일, 신규 기능, ~1,000 토큰 | explorer → architect → writer → reviewers |
+| 복잡 | 5파일+, 다중 시스템 연동, ~2,500 토큰 | explorer → architect → writer(다수) → reviewers → integrator |
 | 보안 | 인증/권한/결제 관련 | explorer → architect → writer → spec-reviewer → quality-reviewer(2회) |
 
 ### 에이전트 상태 관리
@@ -163,6 +163,34 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 | **DONE_WITH_CONCERNS** | 완료 + 우려사항 | 검토 후 진행 |
 | **NEEDS_CONTEXT** | 정보 부족 | sj가 정보 제공 후 재스폰 |
 | **BLOCKED** | 근본적 차단 | 원인 분석 → 모델 승격/분할/에스컬레이션 |
+
+### 품질 보증 시스템
+
+| 기능 | 설명 |
+|------|------|
+| **Confidence Check** | 작업 전 신뢰도 평가. ≥90% 진행, 70-89% 보완, <70% 정보 요청 |
+| **SelfCheckProtocol** | 에이전트 완료 전 4가지 자가 검증 (PRD 근거, 무단 import, 함수 존재성, 에러 구체성) |
+| **Reflexion Memory** | 에러 패턴 JSONL 저장, 재발 방지. 에이전트 스폰 시 자동 포함 |
+| **Deep Research** | 다중 홉 추론(최대 5회) + 품질 스코어링(0.0~1.0) + 사례 기반 학습 |
+
+### 도메인 전문 에이전트
+
+상황에 맞춰 선택적으로 활용하는 11개 전문 에이전트:
+
+| 에이전트 | 영역 |
+|---------|------|
+| `@security-engineer` | 보안 심층 리뷰 (OWASP) |
+| `@devops-architect` | CI/CD, Docker, 배포 |
+| `@performance-engineer` | 프로파일링, 메모리 최적화 |
+| `@business-panel-experts` | 비즈니스 전략 분석 |
+| `@root-cause-analyst` | 버그 원인 심층 추적 |
+| `@requirements-analyst` | 복잡한 PRD, 이해관계자 분석 |
+| `@technical-writer` | API 문서, 가이드 |
+| `@learning-guide` | 개념 설명, 교육 |
+| `@socratic-mentor` | 질문 기반 학습 |
+| `@refactoring-expert` | 기술 부채 정리 |
+| `@python-expert` | Python 특화 |
+| `@repo-index` | 저장소 구조 분석 |
 
 ### 스킬/MCP 검색 인프라
 
@@ -208,11 +236,13 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 │   ├── on-session-end.sh
 │   ├── on-pre-compact.sh
 │   └── on-subagent-stop.sh
-├── rules/                 # 상세 규칙
-│   ├── modes.md           # 모드 감지 + 개발 워크플로우
-│   ├── subagent-rules.md  # 에이전트 위임 규칙
-│   ├── maintenance.md     # 메모리 관리 + 유지보수
+├── rules/                 # 상세 규칙 (785줄, 압축 최적화)
+│   ├── modes.md           # 모드 감지 + 개발 워크플로우 + Deep Research + Confidence Check
+│   ├── subagent-rules.md  # 에이전트 위임 + Token Budget + 도메인 에이전트
+│   ├── maintenance.md     # 메모리 관리 + Reflexion Memory
 │   └── context-template.md # 프로젝트 컨텍스트 템플릿
+├── memory/                # 세션 간 지식
+│   └── reflexion-patterns.jsonl  # 에러 패턴 저장소
 └── scripts/               # 유틸리티 스크립트
     ├── project-init.sh    # 프로젝트 초기화
     └── memory-optimize.sh # 메모리 최적화
