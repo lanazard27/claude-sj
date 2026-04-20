@@ -128,6 +128,23 @@ sj 분석 → code-writer 여럿 스폰 → code-integrator 병합
 | 병렬 구현 | **Agent** (+ isolation="worktree") |
 | 작업 중간 협업 필요 | **Teammate** |
 
+## #2 새 의존성 사전 설치 (sj 책임)
+architect 완료 후 Phase F(구현) 전에:
+1. architect 출력에서 **"새 의존성"** 섹션 확인
+2. 새 패키지가 있으면 sj가 직접 설치: `cd [프로젝트경로] && npm install [패키지@버전]`
+3. 설치 실패 시 버전 조정 후 재시도 (최대 2회)
+4. writer는 이미 설치된 것으로 간주하고 import만 작성
+
+## #4 DB 스키마 변경 (Phase 0 포함)
+스키마 변경이 필요한 작업 시:
+1. architect가 **구현 맵에 schema.prisma 수정 포함** (또는 migration 파일)
+2. Phase 0(공통 기반)에서 **스키마 수정 + migration 실행**:
+   - `schema.prisma` 수정
+   - `npx prisma migrate dev --name [기능명]` 실행
+   - `npx prisma generate` 실행
+3. Phase 1 writers는 **수정된 스키마 기반**으로 구현
+4. 마이그레이션 실패 시 sj가 롤백 후 원인 파악
+
 ## 위임 프롬프트 필수 항목
 1. **역할**: 명확한 역할 정의
 2. **범위**: 접근할 파일/디렉토리 명시 (범위 밖 금지)
