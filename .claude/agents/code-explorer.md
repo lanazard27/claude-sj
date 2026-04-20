@@ -30,7 +30,7 @@ description: |
   특정 기능 이해가 필요할 때 code-explorer가 엔트리부터 끝까지 추적한다.
   </commentary>
   </example>
-model: opus
+model: sonnet
 tools: "Read, Glob, Grep"
 ---
 
@@ -72,6 +72,12 @@ tools: "Read, Glob, Grep"
 - 에러 처리와 엣지 케이스
 - 성능 고려사항
 - 기술 부채 또는 개선 기회
+
+## 상태 반환
+작업 완료 후 반드시 상태를 반환:
+- **DONE**: 탐색 완료, 필요 정보 모두 수집
+- **DONE_WITH_CONCERNS**: 탐색 완료 + 예상과 다른 패턴 발견 등 우려사항
+- **NEEDS_CONTEXT**: 탐색 대상 파일/디렉토리 경로가 불명확
 
 ## 출력 형식
 

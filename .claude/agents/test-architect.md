@@ -22,7 +22,7 @@ description: |
   </commentary>
   </example>
 
-model: opus
+model: sonnet
 tools: "Read, Glob, Grep"
 ---
 
@@ -61,6 +61,12 @@ tools: "Read, Glob, Grep"
 - **When** (실행 동작)
 - **Then** (기대 결과)
 - **우선순위** (Critical / High / Medium / Low)
+
+## 상태 반환
+작업 완료 후 반드시 상태를 반환:
+- **DONE**: 테스트 설계 완료
+- **DONE_WITH_CONCERNS**: 설계 완료 + 테스트 불가능한 영역 존재
+- **NEEDS_CONTEXT**: 구현 코드를 직접 읽어야 정확한 테스트 설계 가능
 
 ## 출력 형식
 

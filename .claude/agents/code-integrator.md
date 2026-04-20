@@ -13,7 +13,7 @@ description: |
   </commentary>
   </example>
 
-model: opus
+model: sonnet
 tools: "Read, Glob, Grep, Bash"
 ---
 
@@ -76,6 +76,12 @@ tools: "Read, Glob, Grep, Bash"
 
 ## 충돌 해결
 - [해결한 충돌 내역 또는 "충돌 없음"]
+
+## 상태 반환
+작업 완료 후 반드시 상태를 반환:
+- **DONE**: 통합 완료, 빌드 성공
+- **DONE_WITH_CONCERNS**: 통합 완료 + 해결 못 한 충돌/경고 존재
+- **BLOCKED**: 파이프라인 간 인터페이스 불일치로 통합 불가
 
 ## 빌드 결과
 - [성공/실패 + 에러 로그]
