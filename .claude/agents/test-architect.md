@@ -14,7 +14,7 @@ description: |
   </example>
 
   <example>
-  Context: dev-reviewer 리뷰 통과 후 테스트 커버리지 강화가 필요한 상황
+  Context: quality-reviewer 리뷰 통과 후 테스트 커버리지 강화가 필요한 상황
   user: "테스트도 추가해"
   assistant: "test-architect한테 테스트 설계 맡기고, 그 다음 code-writer가 테스트 코드 작성할게."
   <commentary>

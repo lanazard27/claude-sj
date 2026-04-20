@@ -10,12 +10,13 @@
 사용자
   ↓
 sj (오케스트레이터)
-  ├── code-explorer  — 코드베이스 탐색
-  ├── code-architect — 아키텍처 설계
-  ├── code-writer    — 코드 구현/수정
-  ├── test-architect — 테스트 케이스 설계
-  ├── dev-reviewer   — 코드 리뷰/검증
-  └── code-integrator — 병렬 결과물 통합
+  ├── code-explorer    — 코드베이스 탐색
+  ├── code-architect   — 아키텍처 설계
+  ├── code-writer      — 코드 구현/수정
+  ├── test-architect   — 테스트 케이스 설계
+  ├── spec-reviewer    — 스펙 준수 리뷰
+  ├── quality-reviewer — 코드 품질 리뷰
+  └── code-integrator  — 병렬 결과물 통합
 ```
 
 ### 에이전트 역할
@@ -23,12 +24,13 @@ sj (오케스트레이터)
 | 에이전트 | 역할 | 권한 | 모델 |
 |---------|------|------|------|
 | **sj** | 조율자. 사용자 요청 분석 후 적절한 에이전트에 위임 | 전체 (코드 작성 제외) | opus |
-| **code-explorer** | 코드 흐름 추적, 유사 기능 탐색, 아키텍처 매핑 | 읽기 전용 | opus |
+| **code-explorer** | 코드 흐름 추적, 유사 기능 탐색, 아키텍처 매핑 | 읽기 전용 | sonnet |
 | **code-architect** | 기존 패턴 분석 후 최적 아키텍처 설계, 구현 청사인 작성 | 읽기 전용 | opus |
-| **code-writer** | 스펙/청사인 기반 코드 구현, 버그 수정, 마이그레이션 | 읽기 + Bash (`cat >`) | opus |
-| **test-architect** | 엣지 케이스 분석, 테스트 케이스 명세 설계 | 읽기 전용 | opus |
-| **dev-reviewer** | 버그/보안/품질 리뷰. 신뢰도 80점 이상 이슈만 리포트 | 읽기 전용 | opus |
-| **code-integrator** | 병렬 작업 결과물 병합, 충돌 해결, 빌드 검증 | 읽기 + Bash | opus |
+| **code-writer** | 스펙/청사인 기반 코드 구현, 버그 수정, 마이그레이션 | 읽기 + Bash (`cat >`) | haiku/sonnet/opus |
+| **test-architect** | 엣지 케이스 분석, 테스트 케이스 명세 설계 | 읽기 전용 | sonnet |
+| **spec-reviewer** | PRD/스펙 요구사항 일치 여부 검증 (누락/초과) | 읽기 전용 | opus |
+| **quality-reviewer** | 보안/성능/패턴 품질 리뷰. 신뢰도 80점 이상 이슈만 리포트 | 읽기 전용 | opus |
+| **code-integrator** | 병렬 작업 결과물 병합, 충돌 해결, 빌드 검증 | 읽기 + Bash | sonnet |
 
 ## 빠른 시작
 
@@ -66,7 +68,7 @@ bash claude-sj/.claude/scripts/project-init.sh
 sj 오, 장바구니? 개발 모드로 들어간다.
 먼저 기존 코드베이스에서 비슷한 패턴 찾아볼게...
 
-[code-explorer 탐색 → code-architect 설계 → code-writer 구현 → dev-reviewer 리뷰]
+[code-explorer 탐색 → code-architect 설계 → code-writer 구현 → spec-reviewer → quality-reviewer]
 ```
 
 ## 훅 시스템 (보안 방어선)
@@ -132,23 +134,24 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 - **일반 (1인)** — code-writer 1명이 순차 구현
 - **버스트 (팀)** — code-writer 여럿이 병렬 구현 → code-integrator 통합
 
-**검증 (3-Phase 피드백 루프):**
+**검증 (4-Phase 피드백 루프):**
 
 | Phase | 내용 | 최대 |
 |-------|------|------|
-| 1. 정적 분석 | dev-reviewer 리뷰 → 수정 → 재리뷰 | 3회 |
-| 2. 빌드 | 빌드 실패 → 수정 → 재빌드 | 3회 |
-| 3. 테스트 | 테스트 실패 → 수정 → 재테스트 | 3회 |
+| 0. 셀프 리뷰 | code-writer가 자신이 작성한 코드를 자가 검증 | 1회 |
+| 1. 스펙 준수 | spec-reviewer가 PRD 요구사항 일치 여부 검증 | 2회 |
+| 2. 코드 품질 | quality-reviewer가 보안/성능/패턴 검증 | 2회 |
+| 3. 빌드 + 테스트 | 빌드 → 테스트 → 실패 시 수정 | 3회 |
 | **전체** | | **5회** |
 
 ### 복잡도 기반 스마트 라우팅
 
 | 복잡도 | 판단 기준 | 에이전트 조합 |
 |--------|----------|--------------|
-| 단순 | 1-2파일, 기존 패턴 있음 | code-writer만 |
-| 중간 | 3-5파일, 신규 기능 | explorer → architect → writer → reviewer |
-| 복잡 | 5파일+, 다중 시스템 연동 | explorer → architect → writer(다수) → test-architect → reviewer → integrator |
-| 보안 | 인증/권한/결제 관련 | explorer → architect → writer → reviewer(2회) |
+| 단순 | 1-2파일, 기존 패턴 있음 | code-writer만 (haiku) |
+| 중간 | 3-5파일, 신규 기능 | explorer → architect → writer → reviewers |
+| 복잡 | 5파일+, 다중 시스템 연동 | explorer → architect → writer(다수) → reviewers → integrator |
+| 보안 | 인증/권한/결제 관련 | explorer → architect → writer → spec-reviewer → quality-reviewer(2회) |
 
 ## 커스터마이징
 
@@ -164,7 +167,8 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 │   ├── code-explorer.md   # 탐색 전담
 │   ├── code-architect.md  # 설계 전담
 │   ├── test-architect.md  # 테스트 설계
-│   ├── dev-reviewer.md    # 리뷰 전담
+│   ├── spec-reviewer.md   # 스펙 준수 리뷰
+│   ├── quality-reviewer.md # 코드 품질 리뷰
 │   └── code-integrator.md # 통합 전담
 ├── hooks/                 # 자동화 훅
 │   ├── lib/

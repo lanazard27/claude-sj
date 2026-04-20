@@ -52,7 +52,7 @@
 
 ### 1. Prompt Chaining (순차)
 ```
-code-architect 설계 → code-writer 구현 → dev-reviewer 검증
+code-architect 설계 → code-writer 구현(셀프 리뷰) → spec-reviewer → quality-reviewer
 ```
 
 ### 2. Pipeline Parallelization (병렬 파이프라인) ⭐ 권장
@@ -75,7 +75,7 @@ Phase 2: 연결 (1명)
 └── code-writer — reducer, App.jsx, 라우팅, 스펙 간 연결
 
 Phase 3: 검증
-└── dev-reviewer — 전체 리뷰
+└── spec-reviewer → quality-reviewer (순차)
 ```
 
 **스펙 단위 분할 규칙:**

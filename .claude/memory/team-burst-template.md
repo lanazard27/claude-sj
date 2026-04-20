@@ -10,7 +10,7 @@
 [Phase 0] code-writer 1명: 공통 기반 (types, constants, hooks, utils)
 [Phase 1] code-writer N명: 스펙별 병렬 (각 3-6파일)
 [Phase 2] code-writer 1명: 연결 (reducer, App, 라우팅)
-[검증] dev-reviewer: Per-pipeline 리뷰 → 통합 리뷰 → 빌드/테스트
+[검증] 셀프 리뷰 → spec-reviewer → quality-reviewer → 빌드/테스트
 ```
 
 ## 트리거 조건
@@ -43,7 +43,7 @@
   - 테스트 명세
   - **수정 가능/금지 파일 목록**
   - **"Bash cat > 사용, 질문 금지, 즉시 실행"**
-- 각 code-writer는 빌드 검증까지 수행
+- 각 code-writer는 빌드 검증 + 셀프 리뷰까지 수행
 - 파일 누락 시 재스폰 (resume 금지)
 
 ## Phase 2: 연결 (1명)
@@ -53,10 +53,10 @@
 - 통합 빌드 검증
 
 ## 검증
-- 10파일 이하: dev-reviewer 1명 전체 리뷰
+- 10파일 이하: spec-reviewer → quality-reviewer (순차)
 - 10파일+:
-  - Per-pipeline 리뷰 (병렬, 깊이)
-  - 통합 리뷰 (1명, 연결점)
+  - Per-pipeline 리뷰: 각 파이프라인 spec-reviewer → quality-reviewer
+  - 통합 리뷰: spec-reviewer → quality-reviewer (순차)
 - 빌드 + 테스트
 
 ## 실패 시 대응
