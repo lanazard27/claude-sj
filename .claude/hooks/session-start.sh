@@ -75,6 +75,16 @@ fi
 echo "$PROJECT_DIR" > "$LAST_PROJECT_FILE"
 
 # ============================================================
+# 프로젝트 CONTEXT.md 자동 감지
+# ============================================================
+CONTEXT_FILE="$PROJECT_DIR/CONTEXT.md"
+if [ -f "$CONTEXT_FILE" ]; then
+  echo "--- 프로젝트 컨텍스트 (CONTEXT.md) ---"
+  head -30 "$CONTEXT_FILE" 2>/dev/null || true
+  echo ""
+fi
+
+# ============================================================
 # 세션 통계 표시 (있는 경우)
 # ============================================================
 STATS_FILE="$MEMORY_DIR/../stats/usage.json"
@@ -96,6 +106,19 @@ except:
   if [ -n "$TODAY_STATS" ]; then
     echo "--- 오늘 통계 ---"
     echo "$TODAY_STATS"
+    echo ""
+  fi
+fi
+
+# ============================================================
+# 관련 memory 자동 요약 (기술 스택 매칭)
+# ============================================================
+if [ -f "$MEMORY_FILE" ]; then
+  # MEMORY.md에서 기술 키워드 추출 (최대 10줄)
+  MEMORY_SNIPPET=$(grep -i -E "(기술|스택|프레임워크|DB|프로젝트|선호|컨벤션|패턴|주의|금지)" "$MEMORY_FILE" 2>/dev/null | head -10 || true)
+  if [ -n "$MEMORY_SNIPPET" ]; then
+    echo "--- 이전 경험 요약 ---"
+    echo "$MEMORY_SNIPPET"
     echo ""
   fi
 fi

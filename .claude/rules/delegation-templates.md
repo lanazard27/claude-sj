@@ -3,6 +3,8 @@
 > sj가 에이전트를 스폰할 때 반드시 이 템플릿을 사용한다.
 > **원칙: sj는 "요약"하지 않고 "복사"한다.** 이전 에이전트의 출력은 그대로 전달.
 
+<!-- 목차: 공통규칙(6줄) | explorer(14줄) | architect(26줄) | writer(84줄) | spec-reviewer(168줄) | quality-reviewer(214줄) | test-architect(260줄) | integrator(304줄) -->
+
 ## 공통 규칙 (모든 템플릿에 적용)
 
 1. **Verbatim 복사** — architect/explorer 출력을 sj가 재작성하지 않음. 마크다운 블록 그대로 전달
