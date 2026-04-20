@@ -97,14 +97,17 @@ sj가 라우팅
 | 보안 | 인증/권한/결제 | explorer → architect → writer → reviewer(2회) |
 | 테스트 | 커버리지 강화 | test-architect(설계) → writer(구현) → reviewer(검증) |
 
-### Phase 1: 분석 (병렬)
+### Phase 1: 분석 (순차 — explorer → architect)
 
 ```
 sj (Orchestrator)
-    ├── code-explorer #1 (opus) — 파일 탐색, 패턴 분석
-    ├── code-explorer #2 (opus) — 잔여 이슈 스캔
-    └── code-architect (opus) — 설계 청사진
+    ├── code-explorer (opus) — 파일 탐색, 패턴 분석, 유사 기능 발견
+    ↓ 결과를 architect에게 전달 (Verbatim)
+    └── code-architect (opus) — explorer 결과 + PRD 기반 코드 수준 설계
 ```
+
+**주의**: architect는 explorer 결과를 받은 후에 실행. 병렬 금지.
+architect가 기존 코드를 직접 읽어야 하므로 explorer 결과가 선행되어야 함.
 
 ### Phase 2: 구현 (병렬 Prompt Chaining)
 

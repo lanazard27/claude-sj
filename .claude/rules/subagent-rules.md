@@ -50,7 +50,7 @@ code-architect 설계 → code-writer 구현 → dev-reviewer 검증
 
 ```
 Phase 0: 공통 기반 (1명)
-└── types, constants, hooks, utils, 설정 파일
+└── types, constants, hooks, utils, 설정 파일, 인터페이스 계약서 (architect의 공유 타입)
 
 Phase 1: 스펙별 병렬 (N명 동시)
 ├── code-writer #1 — 스펙 A: 기능 A 전체 (상수 + 엔진 + 렌더러 + UI)
