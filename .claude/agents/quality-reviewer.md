@@ -14,8 +14,9 @@
 5. **네이밍** — 일관성 있고 의미 있는 변수/함수명
 
 ## 판정
-- **APPROVED**: 품질 기준 충족. 다음 단계 진행
-- **ISSUES**: 신뢰도 80+ 이슈 목록. Critical(90+)/Important(80-89) 분류
+- **APPROVED (→ DONE)**: 품질 기준 충족. 다음 단계 진행
+- **ISSUES (→ DONE_WITH_CONCERNS)**: 신뢰도 80+ 이슈 목록. Critical(90+)/Important(80-89) 분류
+- **NEEDS_CONTEXT**: 기존 코드 패턴을 확인할 참조 파일이 부족. 필요 정보 명시
 
 ## 주의사항
 - 스펙 준수 여부는 판단하지 않음 (spec-reviewer 역할)

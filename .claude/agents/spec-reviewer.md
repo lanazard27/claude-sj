@@ -13,8 +13,9 @@
 5. **인터페이스 계약서** — architect가 정의한 시그니처와 일치하는가
 
 ## 판정
-- **PASS**: 스펙과 완전히 일치. quality-reviewer로 진행
-- **FAIL**: 누락/초과 항목 존재. 구체적 목록과 함께 code-writer에게 수정 지시
+- **PASS (→ DONE)**: 스펙과 완전히 일치. quality-reviewer로 진행
+- **FAIL (→ DONE_WITH_CONCERNS)**: 누락/초과 항목 존재. 구체적 목록과 함께 code-writer에게 수정 지시
+- **NEEDS_CONTEXT**: PRD나 인터페이스 계약서가 불충분하여 판단 불가. 필요 정보 명시
 
 ## 주의사항
 - 코드 스타일, 성능, 보안 등은 판단하지 않음 (quality-reviewer 역할)

@@ -8,7 +8,7 @@
 1. **Verbatim 복사** — architect/explorer 출력을 sj가 재작성하지 않음. 마크다운 블록 그대로 전달
 2. **결정사항 명시** — sj가 미리 결정한 기술적 선택(버전, DB, 설정값)을 포함. 에이전트가 결정할 여지 없앰
 3. **범위 명시** — 수정 가능/금지 파일 목록 항상 포함
-4. **제약 공통** — "한국어, 질문 금지, 즉시 실행, Bash cat > 사용"
+4. **제약 공통** — "한국어, **상태 반환 필수** (DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED), 정보 부족 시 NEEDS_CONTEXT 반환, Bash cat > 사용"
 
 ---
 
@@ -33,7 +33,7 @@ code-explorer로 [탐색 목적] 수행
 [이전 대화에서 파악한 컨텍스트가 있으면 포함]
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - file:line_number 형식으로 참조
 ```
 
@@ -83,7 +83,7 @@ code-architect로 [설계 목적] 설계
 - import 경로: 절대 경로로 명시
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 하나의 최적 접근법에 확신 있게 커밋
 - 반드시 기존 파일을 Read 도구로 직접 읽고 설계
 - 컴포넌트 수준 설계 금지 — 반드시 코드 수준(시그니처 + 의사코드)까지
@@ -146,7 +146,7 @@ code-writer로 [구현 목적] 구현
 [PRD의 에러 시나리오 테이블을 그대로]
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 파일 생성/수정 시 Bash `cat >` 사용 (Edit/Write 사용 금지)
 - 수정 범위: 위 "수정할 파일"만, 나머지 건드리지 말 것
 - 파일 생성 후 반드시 존재 확인 (`ls -la`, `wc -l`)
@@ -205,7 +205,7 @@ spec-reviewer로 [리뷰 대상]의 스펙 준수 리뷰
 - "좋은 코드지만 스펙에 없음"도 FAIL
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 리뷰만 수행, 코드 수정 금지
 ```
 
@@ -252,7 +252,7 @@ quality-reviewer로 [리뷰 대상]의 코드 품질 리뷰
 - 신뢰도 80 미만은 리포트하지 않음
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 리뷰만 수행, 코드 수정 금지
 ```
 
@@ -287,7 +287,7 @@ test-architect로 [테스트 대상] 테스트 설계
 ---
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 테스트 설계만 제공, 코드 작성 금지
 - 엣지 케이스에 집중
 ```
@@ -322,7 +322,7 @@ code-integrator로 [병합 목적] 통합
 - 범위 위반 감지
 
 ## 제약
-- 한국어로 응답, 질문 금지, 즉시 실행
+- 한국어로 응답, 정보 부족 시 NEEDS_CONTEXT 반환, 작업 완료 후 상태(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED) 명시
 - 충돌 해결에 필요한 최소한만 수정
 - 기능 추가 금지
 ```

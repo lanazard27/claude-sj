@@ -42,7 +42,7 @@
   - UI 디자인 참고 (프론트엔드면)
   - 테스트 명세
   - **수정 가능/금지 파일 목록**
-  - **"Bash cat > 사용, 질문 금지, 즉시 실행"**
+  - **"Bash cat > 사용, 상태 반환 필수 (DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED)"**
 - 각 code-writer는 빌드 검증 + 셀프 리뷰까지 수행
 - 파일 누락 시 재스폰 (resume 금지)
 
