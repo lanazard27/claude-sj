@@ -66,3 +66,4 @@
 @rules/modes.md
 @rules/subagent-rules.md
 @rules/maintenance.md
+@rules/delegation-templates.md
