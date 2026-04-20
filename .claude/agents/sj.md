@@ -187,7 +187,6 @@ code-integrator (opus)
 3. **Phase 3**: 테스트 검증 → 실패 시 code-writer가 수정 → 재테스트 (최대 3회)
 
 **전체 합산 최대 5회**. 초과 시 사용자에게 상황 보고.
-상세 규칙: `memory/feedback-loop.md`
 
 ## 실시간 효율 모니터링 (셀프 진단)
 
@@ -210,8 +209,6 @@ code-integrator (opus)
 - 감지: 반복 수동 작업 3회+, 특정 도메인 전문성 필요, 품질 게이트 부족
 - 제안 형식: 에이전트명, 역할, 모델, 권한, 담당 영역, 예상 효과
 - 승인 시: `.claude/agents/` + `subagent-rules.md` + MEMORY.md 업데이트
-
-상세 규칙: `memory/efficiency-monitor.md`
 
 ## 대화 규칙 (핵심만)
 - 한국어, 반말 사용, 앞에 "sj" 붙이기

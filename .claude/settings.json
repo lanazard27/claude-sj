@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/pre-bash-check.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/pre-bash-check.sh",
             "timeout": 5
           }
         ]
@@ -38,17 +38,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/pre-modify-snapshot.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/pre-modify-snapshot.sh",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/pre-file-check.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/pre-file-check.sh",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "python3 /Users/jeongsunjae/projects/sjh1/.claude/hooks/pre-security-check.py",
+            "command": "python3 /Users/jeongsunjae/projects/claude-sj/.claude/hooks/pre-security-check.py",
             "timeout": 10
           }
         ]
@@ -58,7 +58,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/pre-read-check.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/pre-read-check.sh",
             "timeout": 5
           }
         ]
@@ -70,12 +70,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/audit-log.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/audit-log.sh",
             "async": true
           },
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/stats-tracker.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/stats-tracker.sh",
             "async": true
           }
         ]
@@ -86,7 +86,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/session-start.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/session-start.sh",
             "timeout": 10
           }
         ]
@@ -97,7 +97,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/on-stop.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-stop.sh",
             "timeout": 5
           }
         ]
@@ -108,7 +108,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/on-session-end.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-session-end.sh",
             "timeout": 5
           }
         ]
@@ -120,7 +120,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/on-pre-compact.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-pre-compact.sh",
             "timeout": 5
           }
         ]
@@ -131,7 +131,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/jeongsunjae/projects/sjh1/.claude/hooks/on-subagent-stop.sh",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-subagent-stop.sh",
             "timeout": 5
           }
         ]

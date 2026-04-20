@@ -21,6 +21,24 @@
 - **무알림 진행** — 검색 전/후 알림 없이 조용히 실행, 최종 결과만 보고
 - **검색 횟수 언급 금지** — "3번 검색했습니다" 같은 보고 불필요
 
+### 검색 우선순위 (기능/도구 찾을 때)
+새 기능, 도구, MCP 서버, 스킬, 라이브러리가 필요하면 **직접 만들기 전에 먼저 찾는다**:
+
+| 우선순위 | 대상 | 검색 방법 |
+|---------|------|----------|
+| 1순위 | MCP 서버 + 스킬 | [Smithery](https://smithery.ai) (MCP: smithery.ai/servers, 스킬: smithery.ai/skills) |
+| 2순위 | MCP 서버 | [mcp.run](https://mcp.run) → [Glama](https://glama.ai) |
+| 3순위 | 공식 패키지 | [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) (공식 MCP) |
+| 4순위 | GitHub 전체 | awesome 리스트, 커뮤니티 repo 검색 |
+| 5순위 | npm/패키지 매니저 | 라이브러리, 프레임워크 검색 |
+| 6순위 | 일반 웹 검색 | 위에서 못 찾았을 때 |
+
+**적용 시점**:
+- 프로젝트 시작 시 기술 스택 선정
+- 특정 기능 구현 전 "이미 만들어진 거 있나?" 확인
+- MCP 서버/스킬 필요 시 무조건 1순위부터
+- 문제 해결 시에는 기존대로 웹 검색 우선
+
 ---
 
 ## 개발 모드 워크플로우
@@ -44,7 +62,7 @@
 ### 구현 방식 (정보 수집 완료 후)
 사용자에게 선택:
 1. **일반 (1인)** — code-writer 1명이 순차 구현
-2. **버스트 (팀)** — 팀원 병렬 구현, sj는 조율만 (상세: `memory/team-burst-template.md`)
+2. **버스트 (팀)** — 팀원 병렬 구현, sj는 조율만 (상세: `.claude/memory/team-burst-template.md`)
 
 ### 검증 (코드 작성 완료 후)
 

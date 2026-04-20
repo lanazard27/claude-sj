@@ -60,7 +60,7 @@ code-writer → dev-reviewer → 이슈 발견 → code-writer 수정 → 재리
 ```
 sj 분석 → code-writer 여럿 스폰 → code-integrator 병합
 ```
-상세: `memory/team-burst-template.md`
+상세: `.claude/memory/team-burst-template.md`
 
 ## Agent vs Teammate
 
