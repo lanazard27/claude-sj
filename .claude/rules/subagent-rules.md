@@ -15,12 +15,12 @@
 
 작업 복잡도에 따라 자동으로 에이전트 조합 결정:
 
-| 복잡도 | 판단 기준 | 에이전트 조합 |
-|--------|----------|--------------|
+| 복잡도 | 판단 기준 | 워크플로우 |
+|--------|----------|------------|
 | 단순 | 1-2파일, 기존 패턴 있음 | code-writer만 |
-| 중간 | 3-5파일, 신규 기능 | explorer → architect → writer → reviewer |
-| 복잡 | 5파일+, 다중 시스템 연동 | explorer → architect → writer(다수) → test-architect → reviewer → integrator |
-| 보안 | 인증/권한/결제 관련 | explorer → architect → writer → reviewer(2회) |
+| 중간 | 3-5파일, 신규 기능 | PRD → architect → writer → reviewer |
+| 복잡 | 5파일+, 다중 기능 | PRD → architect(스펙 분할) → Phase 0(공통) → **writers 스펙별 병렬(3-6파일씩)** → writer(연결) → reviewer |
+| 보안 | 인증/권한/결제 관련 | PRD → architect → writer → reviewer(2회) |
 | 테스트 | 테스트 커버리지 강화 | test-architect(설계) → writer(구현) → reviewer(검증) |
 
 ## 모델 승격
@@ -41,12 +41,70 @@
 code-architect 설계 → code-writer 구현 → dev-reviewer 검증
 ```
 
-### 2. Parallelization (병렬)
+### 2. Pipeline Parallelization (병렬 파이프라인) ⭐ 권장
+
+#### 분할 방식: 스펙 단위 (수직 분할) 기본
+
+**기본 원칙**: 레이어(엔진/렌더러/UI)별로 나누지 않고, **기능/스펙 단위**로 나눈다.
+각 code-writer가 하나의 완결된 기능 전체를 담당하여 맥락 이해도를 높인다.
+
 ```
-sj (Orchestrator)
-├── code-writer #1 — 영역 A
-├── code-writer #2 — 영역 B (파일 범위 겹치지 않아야 함)
+Phase 0: 공통 기반 (1명)
+└── types, constants, hooks, utils, 설정 파일
+
+Phase 1: 스펙별 병렬 (N명 동시)
+├── code-writer #1 — 스펙 A: 기능 A 전체 (상수 + 엔진 + 렌더러 + UI)
+├── code-writer #2 — 스펙 B: 기능 B 전체 (상수 + 엔진 + 렌더러 + UI)
+└── code-writer #N — 스펙 N: 기능 N 전체 (상수 + 엔진 + 렌더러 + UI)
+
+Phase 2: 연결 (1명)
+└── code-writer — reducer, App.jsx, 라우팅, 스펙 간 연결
+
+Phase 3: 검증
+└── dev-reviewer — 전체 리뷰
 ```
+
+**스펙 단위 분할 규칙:**
+1. 각 스펙은 **하나의 완결된 기능** (예: "전투 시스템", "인벤토리", "상점")
+2. 각 스펙은 **여러 레이어에 걸쳐 파일을 담당** (constants + engine + renderer + component)
+3. 스펙 간에 **파일이 절대 겹치지 않게** 설계 — 겹치면 Phase 0나 Phase 2로 이동
+4. 공통 파일(타입, 훅, 유틸)은 Phase 0에서 미리 생성
+5. 연결 파일(reducer, App, 라우팅)은 Phase 2에서 처리
+
+**RPG 게임 예시:**
+| 스펙 | 담당 파일 | 파일 수 |
+|------|----------|---------|
+| 스펙 A: 캐릭터 시스템 | classes.js, levelup.js, ClassSelect.jsx, LevelUpModal.jsx | 4개 |
+| 스펙 B: 맵 탐색 | maps.js, map.js(engine), map.js(renderer), sprites.js, MapScreen.jsx | 5개 |
+| 스펙 C: 전투 | battle.js(engine), battle.js(renderer), effects.js, ui-overlay.js, BattleScreen.jsx, SkillBar.jsx | 6개 |
+| 스펙 D: 인벤토리/상점 | items.js, inventory.js, shop.js, InventoryPanel.jsx, ShopScreen.jsx | 5개 |
+| Phase 2 연결 | reducer.js, App.jsx, main.jsx, HUD.jsx, TitleScreen.jsx, DialogBox.jsx, BattleResultModal.jsx | 7개 |
+
+**스펙 분할 기준 (architect가 판단):**
+- 사용자 스토리 단위로 자연스럽게 나뉘는지
+- 스펙 간 파일 충돌이 없는지
+- 각 스펙이 3-6개 파일 범위인지
+- 스펙끼리 의존성이 최소인지
+
+#### 레이어 분할 (수평 분할) — 예외적 사용
+
+스펙 분할이 어려운 경우에만 사용 (예: 모든 기능이 같은 파일을 공유할 때):
+- 엔진 / 렌더러 / 컴포넌트 등 레이어별로 분할
+- 이 경우 Phase 2 연결 작업이 많아짐
+
+#### 공통 규칙 (두 방식 공통)
+
+**에이전트당 파일 수 제한 (퀄리티 핵심):**
+| 파일 수 | 퀄리티 | 권장 |
+|---------|--------|------|
+| 1-3개 | 최상 | ✅ 권장 |
+| 4-6개 | 양호 | 가능 |
+| 7-10개 | 저하 | ⚠️ 분할 권장 |
+| 10개+ | 낮음 | ❌ 반드시 분할 |
+
+- **code-writer 1명당 3-6개 파일이 적정** — 이 이상은 퀄리티가 급격히 떨어짐
+- 한 스펙/파이프라인이 7개+ 파일이면 **2명으로 분할**
+- 각 에이전트 프롬프트에 **수정 가능/금지 파일 목록** 명시
 
 ### 3. Routing (분류)
 단일 에이전트로 처리. 간단한 작업.

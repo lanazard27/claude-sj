@@ -9,7 +9,8 @@
       "Bash(*)",
       "WebSearch",
       "mcp__web-reader__webReader",
-      "mcp__web_reader__webReader"
+      "mcp__web_reader__webReader",
+      "mcp__ddg-search__*"
     ],
     "deny": [
       "Bash(git push *)",
