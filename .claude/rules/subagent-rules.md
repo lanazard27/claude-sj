@@ -19,13 +19,13 @@
 
 작업 복잡도에 따라 자동으로 에이전트 조합 결정:
 
-| 복잡도 | 판단 기준 | 워크플로우 |
-|--------|----------|------------|
-| 단순 | 1-2파일, 기존 패턴 있음 | code-writer만 |
-| 중간 | 3-5파일, 신규 기능 | PRD → architect → writer → reviewer |
-| 복잡 | 5파일+, 다중 기능 | PRD → architect(스펙 분할) → Phase 0(공통) → **writers 스펙별 병렬(3-6파일씩)** → writer(연결) → reviewer |
-| 보안 | 인증/권한/결제 관련 | PRD → architect → writer → reviewer(2회) |
-| 테스트 | 테스트 커버리지 강화 | test-architect(설계) → writer(구현) → reviewer(검증) |
+| 복잡도 | 판단 기준 | 토큰 예산 | 워크플로우 |
+|--------|----------|----------|------------|
+| 단순 | 1-2파일, 기존 패턴 있음 | ~200 | code-writer만 |
+| 중간 | 3-5파일, 신규 기능 | ~1,000 | PRD → architect → writer → reviewer |
+| 복잡 | 5파일+, 다중 기능 | ~2,500 | PRD → architect(스펙 분할) → Phase 0(공통) → **writers 스펙별 병렬(3-6파일씩)** → writer(연결) → reviewer |
+| 보안 | 인증/권한/결제 관련 | ~2,500 | PRD → architect → writer → reviewer(2회) |
+| 테스트 | 테스트 커버리지 강화 | ~1,000 | test-architect(설계) → writer(구현) → reviewer(검증) |
 
 ## 모델 승격 — 작업 복잡도 기반 (Superpowers 방식)
 
@@ -302,6 +302,32 @@ architect 완료 후 Phase F(구현) 전에:
 | `quality-reviewer` | Read, Glob, Grep | 코드 품질 리뷰 전담 |
 | `code-integrator` | Read, Glob, Grep, Bash | 통합/git 전담 |
 | `sj` | 전체 | **조율만, 코드 작성 금지** |
+
+## 전문 도메인 에이전트 (선택적 활용)
+
+`~/.claude/agents/`에 설치된 도메인 전문 에이전트를 sj의 기본 에이전트로 커버 안 되는 영역에 선택적으로 활용.
+
+### 활용 매핑
+
+| 상황 | 에이전트 | 언제 사용 |
+|------|---------|----------|
+| 보안 심층 리뷰 | `@security-engineer` | 인증/권한/결제, OWASP 심층 검증 |
+| DevOps/인프라 | `@devops-architect` | CI/CD, Docker, Terraform, 배포 |
+| 성능 병목 | `@performance-engineer` | 프로파일링, 메모리 누수, 렌더링 최적화 |
+| 비즈니스 분석 | `@business-panel-experts` | 비즈니스 로직, 전략, 시장 분석 |
+| 근원 원인 분석 | `@root-cause-analyst` | 버그 원인 심층 추적 |
+| 요구사항 분석 | `@requirements-analyst` | 복잡한 PRD, 이해관계자 분석 |
+| 기술 문서 | `@technical-writer` | API 문서, 가이드, README |
+| 학습/교육 | `@learning-guide`, `@socratic-mentor` | 개념 설명, 교육 콘텐츠 |
+| 저장소 분석 | `@repo-index` | 새 프로젝트 구조 파악 |
+| 리팩토링 | `@refactoring-expert` | 기술 부채 정리, 패턴 개선 |
+| Python 전문 | `@python-expert` | Python 특화 작업 |
+
+### 사용 원칙
+- **보조 도구** — sj 기본 에이전트(code-architect, code-writer, dev-reviewer)가 주축
+- **필요시에만** — 상황에 맞춰 선택적으로 호출, 기본 에이전트와 중복 호출 금지
+- **sj가 조율** — 도메인 에이전트 호출 시에도 sj가 컨텍스트 제공, 결과 검증
+- **상태 반환 동일** — DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED 적용
 
 ## 역할 분리 원칙
 - **작성 vs 리뷰 분리**: 같은 에이전트가 작성+리뷰하지 않음

@@ -68,10 +68,10 @@
 ## 상세 규칙 (모듈 import)
 
 각 rules 파일의 핵심 한 줄 요약:
-- **modes.md** — 모드 감지, PRD 3단계화(미니/스탠다드/풀), 개발 워크플로우 Phase A~G, 검증 4-Phase 루프
-- **subagent-rules.md** — 라우팅/모델 차등(haiku~opus), 2단계 리뷰(spec→quality), 상태 관리(DONE~BLOCKED), 병렬 분할 검증, 위임 템플릿 필수
-- **maintenance.md** — 메모리 150줄 제한, 월 1회 점검, experience 압축
-- **delegation-templates.md** — 각 에이전트별 프롬프트 템플릿 (verbatim 복사, 상태 반환 필수)
+- **modes.md** — 모드 감지, PRD 3단계화(미니/스탠다드/풀), 개발 워크플로우 Phase A~G, 검증 4-Phase 루프, Confidence Check, Deep Research
+- **subagent-rules.md** — 라우팅/모델 차등(haiku~opus), 2단계 리뷰(spec→quality), 상태 관리(DONE~BLOCKED), 병렬 분할 검증, 위임 템플릿 필수, Token Budget, 전문 도메인 에이전트
+- **maintenance.md** — 메모리 150줄 제한, 월 1회 점검, experience 압축, Reflexion Memory
+- **delegation-templates.md** — 각 에이전트별 프롬프트 템플릿 (verbatim 복사, 상태 반환 필수, SelfCheckProtocol)
 
 @rules/modes.md
 @rules/subagent-rules.md

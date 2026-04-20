@@ -1,0 +1,1 @@
+{"date":"2026-04-21","pattern":"Deep Research MCP 의존 오분석","cause":"Deep Research를 MCP 필수로 잘못 판단, 실제로는 순수 행동 패턴","fix":"WebSearch 도구만으로 다중 홉 추론 구현 가능, MCP는 선택적 향상","context":"시스템 비교 분석"}
