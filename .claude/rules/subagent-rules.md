@@ -4,12 +4,15 @@
 
 | 요청 유형 | 에이전트 | 모델 | 언제 |
 |----------|---------|------|------|
-| 코드베이스 탐색 | `code-explorer` | opus | 유사 기능 찾기, 구조 파악 |
+| 코드베이스 탐색 | `code-explorer` | sonnet | 유사 기능 찾기, 구조 파악 |
 | 아키텍처 설계 | `code-architect` | opus | 청사인, 설계 결정 |
-| 코드 구현/수정 | `code-writer` | opus | 스펙 기반 구현, 버그 수정 |
-| 테스트 케이스 설계 | `test-architect` | opus | 엣지 케이스, 테스트 명세 |
-| 코드 리뷰/검증 | `dev-reviewer` | opus | 품질 게이트, 보안 리뷰 |
-| 결과물 병합 | `code-integrator` | opus | 병렬 작업 통합, 충돌 해결 |
+| 코드 구현/수정 (단순) | `code-writer` | haiku | 1-2파일, 기존 패턴 있음 |
+| 코드 구현/수정 (중간) | `code-writer` | sonnet | 3-5파일, 약간의 판단 필요 |
+| 코드 구현/수정 (복잡) | `code-writer` | opus | 5파일+, 설계 판단 필요 |
+| 테스트 케이스 설계 | `test-architect` | sonnet | 엣지 케이스, 테스트 명세 |
+| 스펙 준수 리뷰 | `spec-reviewer` | opus | PRD와 구현 일치 여부 |
+| 코드 품질 리뷰 | `quality-reviewer` | opus | 보안, 성능, 패턴 준수 |
+| 결과물 병합 | `code-integrator` | sonnet | 병렬 작업 통합, 충돌 해결 |
 
 ## 복잡도 기반 스마트 라우팅
 
@@ -23,16 +26,27 @@
 | 보안 | 인증/권한/결제 관련 | PRD → architect → writer → reviewer(2회) |
 | 테스트 | 테스트 커버리지 강화 | test-architect(설계) → writer(구현) → reviewer(검증) |
 
-## 모델 승격
+## 모델 승격 — 작업 복잡도 기반 (Superpowers 방식)
 
-| 에이전트 | 기본 | 비고 |
-|---------|------|------|
-| `code-explorer` | opus | 탐색 정확도 최우선 |
-| `code-architect` | opus | 설계 품질 최우선 |
-| `code-writer` | opus | 구현 품질 최우선 |
-| `test-architect` | opus | 테스트 설계 품질 최우선 |
-| `dev-reviewer` | opus | 리뷰 정확도 최우선 |
-| `code-integrator` | opus | 통합 안정성 최우선 |
+### 기본 원칙: 가장 약한 모델로 시작, 필요시 승격
+
+| 복잡도 | 판단 신호 | 모델 | 예시 |
+|--------|----------|------|------|
+| **단순** | 1-2파일, 명확한 스펙, 기존 패턴 있음 | haiku | 버튼 추가, API 엔드포인트 1개, 상수 정의 |
+| **중간** | 3-5파일, 약간의 판단 필요, 새 기능 | sonnet | 새 컴포넌트, 미들웨어 추가, 훅 작성 |
+| **복잡** | 5파일+, 설계 판단, 다중 시스템 연동 | opus | 아키텍처 설계, 복잡한 상태관리, 보안 로직 |
+
+### 에이전트별 기본 모델
+
+| 에이전트 | 기본 | 승격 조건 | 비고 |
+|---------|------|----------|------|
+| `code-explorer` | sonnet | 복잡한 아키텍처 파악 시 opus | 탐색은 보통 중간 수준 |
+| `code-architect` | opus | (항상 opus) | 설계 품질은 타협 불가 |
+| `code-writer` | **복잡도에 따라** | haiku → sonnet → opus | 위 표 기준으로 자동 선택 |
+| `test-architect` | sonnet | 복잡한 엣지케이스 시 opus | 일반적 테스트는 sonnet 충분 |
+| `spec-reviewer` | opus | (항상 opus) | 스펙 준수 판단은 정확도 최우선 |
+| `quality-reviewer` | opus | (항상 opus) | 보안/품질 리뷰는 정확도 최우선 |
+| `code-integrator` | sonnet | 복잡한 충돌 시 opus | 통합은 보통 중간 수준 |
 
 ## 위임 패턴
 
@@ -109,10 +123,37 @@ Phase 3: 검증
 ### 3. Routing (분류)
 단일 에이전트로 처리. 간단한 작업.
 
-### 4. Evaluator-Optimizer (피드백)
+### 4. Evaluator-Optimizer (2단계 리뷰 — Superpowers 방식)
+
+**원칙: 스펙 준수 리뷰가 PASS해야 코드 품질 리뷰 시작. 순서 절대 바꾸지 않음.**
+
 ```
-code-writer → dev-reviewer → 이슈 발견 → code-writer 수정 → 재리뷰 (최대 3회)
+code-writer 완료
+    ↓
+Step 0: 셀프 리뷰 (code-writer 자체)
+    ├── 자신이 작성한 코드를 Read로 재확인
+    ├── 누락된 에러 처리, 하드코딩 값, 미사용 import 체크
+    ├── 이슈 발견 → 직접 수정 후 재확인
+    └── 이슈 없음 → 다음 단계
+    ↓
+Step 1: 스펙 준수 리뷰 (spec-reviewer)
+    ├── PRD 요구사항이 모두 구현되었는가? (누락 없음)
+    ├── 스펙에 없는 기능이 추가되지 않았는가? (초과 없음)
+    ├── 에러 시나리오가 모두 처리되었는가?
+    ├── 판정: PASS / FAIL (구체적 누락/초과 목록)
+    └── FAIL → code-writer 수정 → spec-reviewer 재리뷰
+    ↓
+Step 2: 코드 품질 리뷰 (quality-reviewer) — Step 1 PASS 후에만
+    ├── 보안 이슈 (XSS, injection, 시크릿 노출)
+    ├── 성능 이슈 (N+1, 불필요한 리렌더, 메모리 누수)
+    ├── 패턴 준수 (기존 코드와 일치하는가)
+    ├── 판정: APPROVED / ISSUES (신뢰도 80+만 리포트)
+    └── ISSUES → code-writer 수정 → quality-reviewer 재리뷰
+    ↓
+완료
 ```
+
+**최대 반복**: 각 단계당 2회, 전체 합산 4회. 4회 도달 시 사용자 보고.
 
 ### 5. Orchestrator-Workers (버스트)
 ```
@@ -195,12 +236,14 @@ architect 완료 후 Phase F(구현) 전에:
 | `code-architect` | Read, Glob, Grep | 읽기 전용 |
 | `code-writer` | Read, Glob, Grep, Bash | **구현 전담 (파일 생성은 Bash `cat >` 사용)** |
 | `test-architect` | Read, Glob, Grep | 읽기 전용 (설계만) |
-| `dev-reviewer` | Read, Glob, Grep | 리뷰 전담 |
+| `spec-reviewer` | Read, Glob, Grep | 스펙 준수 리뷰 전담 |
+| `quality-reviewer` | Read, Glob, Grep | 코드 품질 리뷰 전담 |
 | `code-integrator` | Read, Glob, Grep, Bash | 통합/git 전담 |
 | `sj` | 전체 | **조율만, 코드 작성 금지** |
 
 ## 역할 분리 원칙
 - **작성 vs 리뷰 분리**: 같은 에이전트가 작성+리뷰하지 않음
+- **스펙 리뷰 vs 품질 리뷰 분리**: spec-reviewer와 quality-reviewer는 독립
 - **설계 vs 구현 분리**: architect 설계 → writer 구현
 - **범위 충돌 방지**: 다른 에이전트가 같은 파일 동시 수정 금지
 

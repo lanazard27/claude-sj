@@ -26,17 +26,25 @@
 
 | 우선순위 | 대상 | 검색 방법 |
 |---------|------|----------|
-| 1순위 | MCP 서버 + 스킬 | [Smithery](https://smithery.ai) (MCP: smithery.ai/servers, 스킬: smithery.ai/skills) |
-| 2순위 | MCP 서버 | [mcp.run](https://mcp.run) → [Glama](https://glama.ai) |
-| 3순위 | 공식 패키지 | [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) (공식 MCP) |
-| 4순위 | GitHub 전체 | awesome 리스트, 커뮤니티 repo 검색 |
-| 5순위 | npm/패키지 매니저 | 라이브러리, 프레임워크 검색 |
-| 6순위 | 일반 웹 검색 | 위에서 못 찾았을 때 |
+| 1순위 | 스킬 + MCP + 마켓플레이스 | [Claude Marketplaces](https://claudemarketplaces.com) (4,200+ 스킬, 770+ MCP 서버, 2,500+ 마켓플레이스 통합 디렉토리) |
+| 1.5순위 | 공식 스킬 컬렉션 | [Claude Skills Hub](https://claudeskills.info/ko/) (한국어 지원, Anthropic/Vercel/Google/Microsoft/OpenAI 공식 스킬 정리) |
+| 2순위 | 스킬 (SKILL.md) | `npx skills find [query]` (find-skills 스킬) → [skills.sh](https://skills.sh) 리더보드 |
+| 3순위 | MCP 서버 + 스킬 | [Smithery](https://smithery.ai) (MCP: smithery.ai/servers, 스킬: smithery.ai/skills) |
+| 4순위 | MCP 서버 | [mcp.run](https://mcp.run) → [Glama](https://glama.ai) |
+| 5순위 | 공식 패키지 | [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) (공식 MCP) |
+| 6순위 | GitHub 전체 | awesome 리스트, 커뮤니티 repo 검색 |
+| 7순위 | npm/패키지 매니저 | 라이브러리, 프레임워크 검색 |
+| 8순위 | 일반 웹 검색 | 위에서 못 찾았을 때 |
+
+**스킬 품질 검증 (1순위 적용 시)**:
+- 설치 수 1K+ 우선, 100 미만은 주의
+- 공식 출처(vercel-labs, anthropics, microsoft) 우선 신뢰
+- GitHub 스타 <100인 출처는 회의적으로 접근
 
 **적용 시점**:
 - 프로젝트 시작 시 기술 스택 선정
 - 특정 기능 구현 전 "이미 만들어진 거 있나?" 확인
-- MCP 서버/스킬 필요 시 무조건 1순위부터
+- 스킬/MCP 서버 필요 시 무조건 1순위부터
 - 문제 해결 시에는 기존대로 웹 검색 우선
 
 ---
@@ -310,52 +318,51 @@ dev-reviewer가 항상 확인하는 **리뷰 체크리스트**를 PRD에 정의.
 
 ### Phase G: 검증 (코드 작성 완료 후)
 
-3-Phase 피드백 루프:
+4-Phase 피드백 루프 (Superpowers 2단계 리뷰 적용):
 
 | Phase | 내용 | 최대 횟수 |
 |-------|------|----------|
-| 1. 정적 분석 | dev-reviewer 리뷰 (프로젝트 체크리스트 기반) → 이슈 수정 → 재리뷰 | 3회 |
-| 2. 빌드 | 빌드 실패 → 수정 → 재빌드 | 3회 |
-| 3. 테스트 | 테스트 실패 → 수정 → 재테스트 | 3회 |
+| 0. 셀프 리뷰 | code-writer가 자신이 작성한 코드를 Read로 재확인 후 자가 수정 | 1회 |
+| 1. 스펙 준수 | spec-reviewer가 PRD 요구사항 일치 여부 검증 → 이슈 수정 → 재리뷰 | 2회 |
+| 2. 코드 품질 | quality-reviewer가 보안/성능/패턴 검증 → 이슈 수정 → 재리뷰 | 2회 |
+| 3. 빌드 + 테스트 | 빌드 → 테스트 → 실패 시 수정 | 3회 |
 | **전체 합산** | | **5회** |
 
+- **스펙 준수는 품질 리뷰보다 항상 먼저** — 순서 바꾸면 안 됨
 - **Critical(>=90)**: 즉시 수정, **Important(80-89)**: 1회만 수정 시도
 - **같은 에러 2회 연속**: 접근 방식 자체가 틀림 → 사용자 보고
 - **5회 도달 시**: 즉시 중단, 상황 보고 + 다음 단계 제안
-- 테스트 없는 프로젝트: Phase 3 스킵
+- 테스트 없는 프로젝트: Phase 3의 테스트만 스킵
 - 코드 작성 없는 작업: 검증 스킵
 
 ### 리뷰 분할 전략 (대규모 프로젝트)
 
-**10파일 이하**: dev-reviewer 1명이 전체 리뷰 (분할 불필요)
+**10파일 이하**: spec-reviewer 1명 → quality-reviewer 1명 (순차)
 
-**10파일+ (파이프라인 병렬 작업 시)**: 2단계 리뷰 적용
+**10파일+ (파이프라인 병렬 작업 시)**: 3단계 리뷰 적용
 
 ```
-Phase 1 병렬 구현 직후 — Per-pipeline 리뷰 (병렬)
-├── dev-reviewer #1 — 파이프라인 A만 깊이 리뷰
-├── dev-reviewer #2 — 파이프라인 B만 깊이 리뷰
-└── dev-reviewer #3 — 파이프라인 C만 깊이 리뷰
+Phase 1 병렬 구현 직후 — Per-pipeline 2단계 리뷰 (병렬)
+├── 파이프라인 A: spec-reviewer → quality-reviewer
+├── 파이프라인 B: spec-reviewer → quality-reviewer
+└── 파이프라인 C: spec-reviewer → quality-reviewer
     ↓ 이슈 수정
 
-Phase 2 연결 완료 후 — 통합 리뷰 (1명)
-└── dev-reviewer — 파이프라인 간 연결, 인터페이스 일치, 전체 패턴 검증
+Phase 2 연결 완료 후 — 통합 리뷰 (1명씩 순차)
+├── spec-reviewer — 파이프라인 간 스펙 준수, 인터페이스 일치
+└── quality-reviewer — 전체 패턴, 보안, 성능 검증
     ↓ 이슈 수정
 
 빌드 + 테스트
 ```
 
 **Per-pipeline 리뷰 포커스:**
-- 해당 파이프라인 내부 로직 정확성
-- PRD 요구사항 충족 여부
-- 에러 시나리오 처리
-- 코드 품질 (중복, 네이밍, 가독성)
+- spec-reviewer: 해당 파이프라인 PRD 요구사항 충족, 에러 시나리오
+- quality-reviewer: 내부 로직 정확성, 코드 품질 (중복, 네이밍, 가독성)
 
 **통합 리뷰 포커스:**
-- 파이프라인 간 인터페이스 일치 (타입, 함수 시그니처)
-- import 경로 정확성
-- 상태/데이터 흐름 일관성
-- 전체 아키텍처 준수
+- spec-reviewer: 파이프라인 간 인터페이스 일치, 스펙 누락
+- quality-reviewer: import 경로, 상태/데이터 흐름, 전체 아키텍처 준수
 
 ---
 
