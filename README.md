@@ -153,6 +153,29 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 | 복잡 | 5파일+, 다중 시스템 연동 | explorer → architect → writer(다수) → reviewers → integrator |
 | 보안 | 인증/권한/결제 관련 | explorer → architect → writer → spec-reviewer → quality-reviewer(2회) |
 
+### 에이전트 상태 관리
+
+모든 에이전트는 작업 완료 후 명시적 상태를 반환:
+
+| 상태 | 의미 | sj 대응 |
+|------|------|---------|
+| **DONE** | 작업 완료 | 다음 단계 진행 |
+| **DONE_WITH_CONCERNS** | 완료 + 우려사항 | 검토 후 진행 |
+| **NEEDS_CONTEXT** | 정보 부족 | sj가 정보 제공 후 재스폰 |
+| **BLOCKED** | 근본적 차단 | 원인 분석 → 모델 승격/분할/에스컬레이션 |
+
+### 스킬/MCP 검색 인프라
+
+새 기능이나 도구가 필요할 때 **직접 만들기 전에 먼저 찾는다**:
+
+| 순위 | 출처 | 규모 |
+|------|------|------|
+| 1순위 | [Claude Marketplaces](https://claudemarketplaces.com) | 4,200+ 스킬, 770+ MCP, 2,500+ 마켓 |
+| 1.5순위 | [Claude Skills Hub](https://claudeskills.info/ko/) | 한국어, 공식 컬렉션 |
+| 2순위 | `npx skills find` + [skills.sh](https://skills.sh) | CLI 검색 + 리더보드 |
+| 3순위 | [Smithery](https://smithery.ai) | MCP 서버/스킬 |
+| 4~8순위 | mcp.run → 공식 MCP → GitHub → npm → 웹 검색 | 폴백 |
+
 ## 커스터마이징
 
 ### 디렉토리 구조
@@ -209,6 +232,10 @@ sj 오, 장바구니? 개발 모드로 들어간다.
 
 - **CLAUDE.md**: 전역 규칙 (모든 에이전트가 참조)
 - **rules/*.md**: 상세 규칙 (CLAUDE.md에서 `@rules/`로 import)
+
+## 관련 프로젝트
+
+- **[sk](https://github.com/lanazard27/sk)** — Skill-Powered Workflow. 기능마다 관련 스킬/MCP를 자동 탐색→설치→실행하는 독립 프로젝트
 
 ## 라이선스
 
