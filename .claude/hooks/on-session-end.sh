@@ -53,4 +53,17 @@ if [ -d "$STATS_DIR" ]; then
   find "$STATS_DIR" -name "usage.json" -mtime +30 -delete 2>/dev/null || true
 fi
 
+# ============================================================
+# 4. 세션 상태 자동 저장 (latest.md)
+# ============================================================
+SESSIONS_DIR="$PROJECT_DIR/.claude/sessions"
+SAVE_SCRIPT="$PROJECT_DIR/.claude/scripts/save-session.py"
+
+if [ -f "$SAVE_SCRIPT" ]; then
+  SAVE_RESULT=$(python3 "$SAVE_SCRIPT" "$PROJECT_DIR" "$SESSIONS_DIR" "$SESSION_ID" "$LOG_FILE" 2>/dev/null || echo "")
+  if [ "$SAVE_RESULT" = "SESSION_SAVED" ]; then
+    echo "[$TIMESTAMP] session=$SESSION_ID event=SESSION_SAVED" >> "$LOG_FILE"
+  fi
+fi
+
 exit 0

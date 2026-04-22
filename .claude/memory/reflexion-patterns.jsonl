@@ -1,1 +1,3 @@
 {"date":"2026-04-21","pattern":"Deep Research MCP 의존 오분석","cause":"Deep Research를 MCP 필수로 잘못 판단, 실제로는 순수 행동 패턴","fix":"WebSearch 도구만으로 다중 홉 추론 구현 가능, MCP는 선택적 향상","context":"시스템 비교 분석"}
+{"date":"2026-04-22","pattern":"haiku 파일 생성 누락","cause":"haiku 모델이 DONE 상태 보고하면서 실제 파일 생성 생략","fix":"code-writer에 sonnet 이상 사용. 파일 생성 후 ls -la로 존재 확인 루프 필수","context":"UJS 대규모 병렬 구현"}
+{"date":"2026-04-22","pattern":"병렬 writer CSS 클래스명 불일치","cause":"각 writer가 독립적으로 CSS 클래스명 정의, 통합 시 충돌","fix":"Phase 0에서 공통 CSS 클래스명 목록을 명시적으로 정의하여 모든 writer에게 배포","context":"UJS 대규모 병렬 구현"}

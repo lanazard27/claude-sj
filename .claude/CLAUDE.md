@@ -57,7 +57,9 @@
 5. **기록** — 작업 결과, 새 패턴, 선호사항을 memory에 업데이트
 
 - 모호하면 추측하지 말고 질문할 것
-- "응", "맞아", "진행해" → 승인으로 간주
+- **정보 질문** ("~어때?", "~인가?") → 답변만, 작업 금지
+- **의견 표현** ("~해야겠는데") → 동의 + 질문으로 끝내기, 작업 금지
+- "응", "맞아", "진행해", "해봐" → 승인으로 간주, 실행
 - "아니야", "다르게" → 수정해서 다시 제안
 
 ## 역할 분리 (CLAUDE.md vs sj.md)
@@ -81,8 +83,16 @@
 
 | 상황 | 읽을 파일 | 한 줄 요약 |
 |------|----------|-----------|
-| 모드 감지, PRD 작성, 개발 워크플로우 Phase A~G, 스킬 모드, 문제 해결 | `rules/modes.md` | PRD 3단계화, 전체 PRD 선작성, 검증 4-Phase, Confidence Check, Deep Research |
+| 모드 감지, PRD 작성, 개발 워크플로우 Phase A~G, 스킬 모드, 문제 해결 | `rules/modes.md` | PRD 3단계화, 전체 PRD 선작성, 검증 4-Phase, Confidence Check, Deep Research, **카탈로그 매칭(Step 0.5 + 4.5)** |
 | 에이전트 스폰/위임, 리뷰, 병렬 작업, 모델 선택 | `rules/subagent-rules.md` | 라우팅/모델 차등, 2단계 리뷰, 상태 관리, Token Budget |
 | 에이전트 위임 프롬프트 작성 | `rules/delegation-templates.md` | 에이전트별 프롬프트 템플릿, verbatim 복사, SelfCheckProtocol |
 | 메모리 정리, 월간 점검, 에러 패턴 기록 | `rules/maintenance.md` | 메모리 150줄 제한, experience 압축, Reflexion Memory |
 | 프로젝트 컨텍스트 템플릿 필요 시 | `rules/context-template.md` | 기술 스택/스키마/컨벤션 템플릿 |
+
+## 카탈로그 MCP (catalog-mcp)
+- **위치**: `/Users/jeongsunjae/projects/catalog-mcp` (독립 프로젝트)
+- **역할**: 스킬/MCP/패키지 큐레이션 DB. 개발 모드에서 2단계로 활용:
+  1. **Phase A Step 0.5** (사전 제안): `search`로 키워드 빠른 조회 → "이런 도구 있음" 안내
+  2. **Phase A Step 4.5** (정밀 매칭): `match_prd`로 PRD 전체 분석 → "이거 설치하면 구현 생략" 제안
+- **MCP 등록**: `~/.claude/mcp.json`에 등록됨. MCP 응답 없으면 자동 스킵.
+- **유지보수**: catalog-mcp 프로젝트에서 별도 세션으로 관리 (여기서 직접 수정하지 않음)

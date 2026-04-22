@@ -5,3 +5,7 @@ dist/
 .DS_Store
 *.db-journal
 .claude/skills/
+
+# 임시 워크스페이스
+packages/
+ui-clone-workspace/
