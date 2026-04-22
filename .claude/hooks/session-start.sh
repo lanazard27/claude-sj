@@ -43,20 +43,6 @@ else
 fi
 
 # ============================================================
-# 작업 진행 상태 (WIP) 자동 로드
-# ============================================================
-WIP_FILE="$MEMORY_DIR/work-in-progress.md"
-if [ -f "$WIP_FILE" ]; then
-  # 현재 작업 상태 추출
-  WIP_STATUS=$(grep -A 3 "^- \*\*상태\*\*" "$WIP_FILE" 2>/dev/null | head -1 | sed 's/^- \*\*상태\*\*: //' || echo "")
-  if [ -n "$WIP_STATUS" ] && [ "$WIP_STATUS" != "없음" ]; then
-    echo "--- 진행 중인 작업 ---"
-    grep -A 8 "^## 현재 작업" "$WIP_FILE" 2>/dev/null | head -9 || true
-    echo ""
-  fi
-fi
-
-# ============================================================
 # 멀티 프로젝트 전환 감지
 # ============================================================
 LAST_PROJECT_FILE="$HOME/.claude/last-project"
@@ -113,8 +99,8 @@ fi
 # ============================================================
 # 관련 memory 자동 요약 (기술 스택 매칭)
 # ============================================================
+MEMORY_FILE="$MEMORY_DIR/MEMORY.md"
 if [ -f "$MEMORY_FILE" ]; then
-  # MEMORY.md에서 기술 키워드 추출 (최대 10줄)
   MEMORY_SNIPPET=$(grep -i -E "(기술|스택|프레임워크|DB|프로젝트|선호|컨벤션|패턴|주의|금지)" "$MEMORY_FILE" 2>/dev/null | head -10 || true)
   if [ -n "$MEMORY_SNIPPET" ]; then
     echo "--- 이전 경험 요약 ---"
@@ -127,8 +113,6 @@ fi
 # 메모리 건강 체크
 # ============================================================
 MEMORY_FILE="$MEMORY_DIR/MEMORY.md"
-WIP_FILE="$MEMORY_DIR/work-in-progress.md"
-EXP_FILE="$MEMORY_DIR/experience.md"
 
 # MEMORY.md 크기 경고
 if [ -f "$MEMORY_FILE" ]; then
@@ -146,18 +130,6 @@ if [ -f "$MEMORY_DIR/.experience-warning" ]; then
   echo "--- experience 누적 ---"
   echo "카테고리 ${EXP_COUNT}개 — 5개 초과. 오래된 카테고리를 인사이트로 압축하세요."
   echo ""
-fi
-
-# 스냅샷 현황
-SNAPSHOT_DIR="$MEMORY_DIR/snapshots"
-if [ -d "$SNAPSHOT_DIR" ]; then
-  SNAPSHOT_SESSIONS=$(ls -d "$SNAPSHOT_DIR"/*/ 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$SNAPSHOT_SESSIONS" -gt 0 ]; then
-    SNAPSHOT_SIZE=$(du -sh "$SNAPSHOT_DIR" 2>/dev/null | cut -f1 || echo "0")
-    echo "--- 스냅샷 ---"
-    echo "${SNAPSHOT_SESSIONS}개 세션, ${SNAPSHOT_SIZE} (7일 후 자동 정리)"
-    echo ""
-  fi
 fi
 
 exit 0

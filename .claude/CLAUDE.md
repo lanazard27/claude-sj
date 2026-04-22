@@ -21,7 +21,6 @@
 - **에이전트 인력 진단** — 전문 에이전트가 부족하면 새 에이전트 추가 제안
 
 ### 에이전트 위임 규칙 (핵심)
-- **상세 규칙은 `@rules/subagent-rules.md` 참조** — 아래는 요약만 기재
 - **`mode: "dontAsk"` 사용** — 사용자에게 권한 팝업 안 가게
 - **사용자는 최종 결과만 받는다** — 중간 과정은 sj가 알아서
 
@@ -41,7 +40,7 @@
 ## 기본 원칙
 - 한국어로 응답할 것
 - 항상 MEMORY.md와 관련 memory 파일을 먼저 읽을 것
-- MEMORY.md는 200줄 제한 — 150줄 초과 시 세션 종료 후 자동 압축됨 (maintenance.md 참조)
+- MEMORY.md는 200줄 제한 — 150줄 초과 시 압축 (maintenance.md 참조)
 
 ## 실행 규칙 (매우 중요)
 - 사용자가 **"시작해"** 라고 명시적으로 말하지 않으면, 절대 바로 만들지 말 것
@@ -65,15 +64,25 @@
 - **CLAUDE.md + rules/** = 모든 행동 규칙의 Source of Truth
 - **sj.md** = 에이전트 실행 지침만 (CLAUDE.md/rules/ 참조, 내용 중복 금지)
 
-## 상세 규칙 (모듈 import)
+## 세션 관리
+- **자동 저장**: 에이전트(code-architect, code-writer, spec-reviewer, quality-reviewer, code-integrator) 작업 완료 후 `.claude/sessions/latest.md`에 현재 진행 상태 자동 저장
+- **"세션불러와"** → `.claude/sessions/latest.md` 읽어서 상태 복원 후 요약
+- **저장 내용**:
+  - 프로젝트 경로 및 기술 스택
+  - 현재 워크플로우 단계 (Phase A~G 중 위치)
+  - 완료된 에이전트 작업 및 결과 요약
+  - 다음 단계 및 남은 작업
+  - 결정된 기술적 선택사항 (아키텍처, 라이브러리, DB 등)
+  - PRD/아키텍처 파일 경로 (있으면)
 
-각 rules 파일의 핵심 한 줄 요약:
-- **modes.md** — 모드 감지, PRD 3단계화(미니/스탠다드/풀), 개발 워크플로우 Phase A~G, 검증 4-Phase 루프, Confidence Check, Deep Research
-- **subagent-rules.md** — 라우팅/모델 차등(haiku~opus), 2단계 리뷰(spec→quality), 상태 관리(DONE~BLOCKED), 병렬 분할 검증, 위임 템플릿 필수, Token Budget, 전문 도메인 에이전트
-- **maintenance.md** — 메모리 150줄 제한, 월 1회 점검, experience 압축, Reflexion Memory
-- **delegation-templates.md** — 각 에이전트별 프롬프트 템플릿 (verbatim 복사, 상태 반환 필수, SelfCheckProtocol)
+## 상세 규칙 (필요시 읽기)
 
-@rules/modes.md
-@rules/subagent-rules.md
-@rules/maintenance.md
-@rules/delegation-templates.md
+아래 상황 발생 시 해당 rules 파일을 Read로 읽고 따를 것. **자동 로딩하지 않음.**
+
+| 상황 | 읽을 파일 | 한 줄 요약 |
+|------|----------|-----------|
+| 모드 감지, PRD 작성, 개발 워크플로우 Phase A~G, 스킬 모드, 문제 해결 | `rules/modes.md` | PRD 3단계화, 전체 PRD 선작성, 검증 4-Phase, Confidence Check, Deep Research |
+| 에이전트 스폰/위임, 리뷰, 병렬 작업, 모델 선택 | `rules/subagent-rules.md` | 라우팅/모델 차등, 2단계 리뷰, 상태 관리, Token Budget |
+| 에이전트 위임 프롬프트 작성 | `rules/delegation-templates.md` | 에이전트별 프롬프트 템플릿, verbatim 복사, SelfCheckProtocol |
+| 메모리 정리, 월간 점검, 에러 패턴 기록 | `rules/maintenance.md` | 메모리 150줄 제한, experience 압축, Reflexion Memory |
+| 프로젝트 컨텍스트 템플릿 필요 시 | `rules/context-template.md` | 기술 스택/스키마/컨벤션 템플릿 |

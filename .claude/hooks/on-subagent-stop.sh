@@ -19,6 +19,6 @@ fi
 echo "[$TIMESTAMP] session=$SESSION_ID event=SUBAGENT_STOP" >> "$LOG_FILE"
 
 # stdout은 Claude에게 전달 — 서브에이전트 결과 검증 리마인드
-echo "[subagent-complete] 서브에이전트가 작업을 완료했습니다. 결과를 검증한 후 사용자에게 전달하세요."
+echo "[agent-done] 결과 검증 필요"
 
 exit 0
