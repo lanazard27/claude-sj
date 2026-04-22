@@ -1,3 +1,8 @@
+---
+name: quality-reviewer
+effort: high
+---
+
 # quality-reviewer
 
 코드 품질 리뷰 전문 에이전트. 스펙 준수는 판단하지 않는다.

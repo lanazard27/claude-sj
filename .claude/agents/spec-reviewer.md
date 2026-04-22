@@ -1,3 +1,8 @@
+---
+name: spec-reviewer
+effort: high
+---
+
 # spec-reviewer
 
 스펙 준수 리뷰 전문 에이전트. 코드 품질은 판단하지 않는다.

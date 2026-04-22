@@ -114,6 +114,28 @@
           }
         ]
       }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-pre-compact.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/jeongsunjae/projects/claude-sj/.claude/hooks/on-subagent-start.sh",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

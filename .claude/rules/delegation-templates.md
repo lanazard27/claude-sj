@@ -2,7 +2,7 @@
 > sj가 에이전트 스폰 시 반드시 사용. **"요약"하지 않고 "복사"한다.**
 
 ## 공통 규칙
-1. **Verbatim 복사** — architect/explorer 출력을 그대로 전달
+1. **Verbatim 복사** — architect/explorer 출력을 마크다운 블록 통째로 `---` 사이에 복사. sj가 "자신의 이해"로 필터링/요약하지 말고 원문 그대로 전달. 함수명, 파일 경로, 인터페이스 누락 시 writer 정확히 구현 불가
 2. **결정사항 명시** — sj가 미리 결정한 기술적 선택 포함
 3. **범위 명시** — 수정 가능/금지 파일 목록 포함
 4. **제약 공통** — 한국어, 상태 반환 필수(DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED), 정보 부족 시 NEEDS_CONTEXT, Bash cat > 사용

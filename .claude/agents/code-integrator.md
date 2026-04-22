@@ -1,5 +1,6 @@
 ---
 name: code-integrator
+effort: medium
 description: |
   통합/병합 전문 에이전트. 병렬 작업 결과물을 메인 브랜치에 병합하고,
   충돌을 해결하며, 빌드 검증을 수행한다.

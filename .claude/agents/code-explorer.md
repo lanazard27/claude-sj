@@ -1,5 +1,6 @@
 ---
 name: code-explorer
+effort: medium
 description: |
   코드베이스 탐색 전문 에이전트. 실행 경로를 추적하고, 아키텍처 계층을 매핑하며,
   기존 패턴과 유사 기능을 분석하여 새 개발에 필요한 컨텍스트를 제공한다.

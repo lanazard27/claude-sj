@@ -1,5 +1,6 @@
 ---
 name: code-architect
+effort: high
 description: |
   아키텍처 설계 전문 에이전트. 기존 코드베이스의 패턴과 컨벤션을 분석하여
   구현 청사진, 컴포넌트 설계, 데이터 흐름, 빌드 시퀀스를 포함한
