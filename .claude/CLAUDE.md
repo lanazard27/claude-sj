@@ -82,7 +82,7 @@
 
 | 상황 | 읽을 파일 | 한 줄 요약 |
 |------|----------|-----------|
-| 모드 감지, PRD 작성, 개발 워크플로우 Phase A~G, 스킬 모드, 핫픽스, 문제 해결 | `rules/modes.md` | PRD 3단계화, 핫픽스 shortcut, 검증 4-Phase, PRD 변경 정합성, 카탈로그 매칭 |
+| 모드 감지, PRD 작성, 개발 워크플로우 Phase A~G, 스킬 모드, 핫픽스, 문제 해결, 프로젝트 리딩, 대규모 문서 제작 | `rules/modes.md` | 규모 분기(3단계), 리딩 모드+마일스톤 브리프, PRD 3단계화, 핫픽스 shortcut, 검증 4-Phase, 정합성 관리, 카탈로그 매칭 |
 | 에이전트 스폰/위임, 리뷰, 병렬 작업, 모델 선택 | `rules/subagent-rules.md` | 라우팅/모델 차등, 2단계 리뷰, 상태 관리, Token Budget |
 | 에이전트 위임 프롬프트 작성 | `rules/delegation-templates.md` | 에이전트별 프롬프트 템플릿, verbatim 복사, SelfCheckProtocol |
 | 메모리 정리, 월간 점검, 에러 패턴 기록 | `rules/maintenance.md` | 메모리 150줄 제한, experience 압축, Reflexion Memory |
