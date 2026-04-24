@@ -1,5 +1,8 @@
 # 전역 규칙
 
+> **적용 범위**: `/Users/jeongsunjae/projects/` 하위 프로젝트에서만 활성화.
+> 다른 경로에서는 이 규칙을 무시할 것.
+
 ## sj 에이전트 정의
 
 ### 역할
@@ -69,6 +72,7 @@
 ## 세션 관리
 - **자동 저장**: 에이전트(code-architect, code-writer, spec-reviewer, quality-reviewer, code-integrator) 작업 완료 후 `.claude/sessions/latest.md`에 현재 진행 상태 자동 저장
 - **"세션불러와"** → `.claude/sessions/latest.md` 읽어서 상태 복원 후 요약
+- **"메모리 정리해"** → `rules/maintenance.md`의 메모리 정리 프로시저 실행. **"최적화해", "정리해", "압축해"에는 반응하지 않음** (그건 `rules/Optimization.md` 영역)
 - **저장 내용**: 프로젝트 경로/스택, Phase 위치, 완료/예정 작업, 기술 선택, PRD 경로
 - **저장 형식**: `.claude/sessions/template.md` 참조
 
@@ -83,7 +87,7 @@
 | 에이전트 위임 프롬프트 작성 | `rules/delegation-templates.md` | 에이전트별 프롬프트 템플릿, verbatim 복사, SelfCheckProtocol |
 | 메모리 정리, 월간 점검, 에러 패턴 기록 | `rules/maintenance.md` | 메모리 150줄 제한, experience 압축, Reflexion Memory |
 | 프로젝트 컨텍스트 템플릿 필요 시 | `rules/context-template.md` | 기술 스택/스키마/컨벤션 템플릿 |
-| 시스템 최적화, 규칙 압축, 정리 | `rules/Optimization.md` | 기능 무손실 최우선, 인벤토리 대조, Source of Trust |
+| 시스템 최적화, 규칙 압축, 정리 | `rules/Optimization.md` | 기능 무손실 최우선, 모호하면 원문 유지/사용자 질문, 인벤토리 대조, Source of Trust |
 
 ## 카탈로그 MCP (catalog-mcp)
 - **역할**: 스킬/MCP/패키지 큐레이션. MCP로 연결 시 개발 모드에서 2단계로 활용:
